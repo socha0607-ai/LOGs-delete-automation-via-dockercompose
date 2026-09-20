@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backup_engine:
+    build: ./app
+    container_name: log_backup_service
+    restart: always
+    user: "1001:1001"
+    volumes:
+      - ./logs:/var/log/app
+      - ./backups:/var/backups/app
+
+  mock_app:
+    image: ubuntu:22.04
+    container_name: production_mock_app
+    restart: always
+    command: >
+      bash -c "while true; do 
+      echo \"[INFO] \$(date) System telemetry processing active execution stream core loop iteration status normal.\" >> /var/log/mock/system.log; 
+      sleep 2; 
+      done"
+    volumes:
+      - ./logs:/var/log/mock
